@@ -2433,4 +2433,5 @@ public class UISingleton implements UI
 	public void setFocusableWindowState(boolean focusable) {
 		f.setFocusableWindowState(focusable);
 	}
+
 }

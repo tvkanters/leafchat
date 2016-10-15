@@ -184,27 +184,28 @@ public class FrameInside extends MacFixInternalFrame implements FrameHolder
 		});
 	}
 
-    /**
-     * When this frame is made visible, this method disables the main frame's focusable property temporarily to prevent
-     * new windows from stealing focus.
-     */
-    @Override
-    public void setVisible(final boolean visible) {
-        if (visible) {
+	/**
+	 * When this frame is made visible, this method disables the main frame's focusable property temporarily to prevent
+	 * new windows from stealing focus.
+	 */
+	@Override
+	public void setVisible(final boolean visible) {
+		if (visible) {
 			wi.getUI().setFocusableWindowState(false);
 
-            super.setVisible(true);
+			super.setVisible(true);
 
-            new Thread(() -> {
-                try {
-                    Thread.sleep(100);
-                } catch (final InterruptedException ex) {}
+			new Thread(() -> {
+				try {
+					Thread.sleep(100);
+				} catch (final InterruptedException ex) {
+				}
 				wi.getUI().setFocusableWindowState(true);
-            }).start();
-        } else {
-            super.setVisible(false);
-        }
-    }
+			}).start();
+		} else {
+			super.setVisible(false);
+		}
+	}
 
 	/** @return True if frame is focused */
 	boolean isFocused()

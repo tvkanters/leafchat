@@ -47,8 +47,8 @@ public class IRCUIPlugin implements Plugin,IRCUI,DefaultMessageDisplay
 	  PREF_CLOSESPAREWINDOWS="close-spare-windows",
 	  PREFDEFAULT_CLOSESPAREWINDOWS="t";
 
-	/** Will not autoreconnect again to same server within 2 minutes */
-	private final static long AUTO_RECONNECT_FREQUENCY = 120 * 1000;
+	/** Will not autoreconnect again to same server within 5 seconds */
+	private final static long AUTO_RECONNECT_FREQUENCY = 5 * 1000;
 
 	private PluginContext context;
 	private ConnectTool ct;
@@ -770,9 +770,8 @@ public class IRCUIPlugin implements Plugin,IRCUI,DefaultMessageDisplay
 	/**
 	 * Called when a ServerDisconnectedMsg is received. As this is passed on by
 	 * ServerChatWindow, it may be called multiple times for a single disconnected
-	 * message; the actual reconnect should only happen once. However, the
-	 * return value will still be true if a reconnect is occuring for this
-	 * message, even if it was already triggered.
+	 * message. However, the return value will still be true if a reconnect is
+	 * occuring for this message, even if it was already triggered.
 	 * @param msg Message
 	 * @return True if autoreconnect is happening for this disconnect event
 	 * @throws GeneralException Any error during reconnect

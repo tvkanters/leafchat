@@ -41,6 +41,7 @@ public class ConnectTool implements SimpleTool, TreeBox.MultiSelectionHandler
 	private static final String PREFS_LASTCONNECT="lastconnect";
 	private static final String PREFS_AUTOSHOW="show-connect";
 	private static final String PREFS_ANDCONNECT="and-connect";
+	private static final int DIRECT_CONNECT_RETRY_DELAY = 5000;
 	private PluginContext context;
 	private IRCUIPlugin plugin;
 	private Window window=null;
@@ -78,6 +79,8 @@ public class ConnectTool implements SimpleTool, TreeBox.MultiSelectionHandler
 	private PrefsServerPage ps;
 
 	private Item[] selectedServers=null;
+
+	private Thread reconnectThread;
 
 	/**
 	 * @param pc Context
@@ -229,7 +232,7 @@ public class ConnectTool implements SimpleTool, TreeBox.MultiSelectionHandler
 		TabPanel tp=(TabPanel)window.getWidget("tabs");
 		tp.add(ps.getPage());
 
-	  serverselectUI.setHandler(this);
+	    serverselectUI.setHandler(this);
 
 		Preferences p=context.getSingle(Preferences.class);
 		PreferencesGroup pg=p.getGroup(plugin).getChild(PREFS_LASTCONNECT);
@@ -327,8 +330,12 @@ public class ConnectTool implements SimpleTool, TreeBox.MultiSelectionHandler
 
 	/** Callback: Window closed */
 	@UIAction
-	public void windowClosed()
-	{
+	public void windowClosed() {
+		synchronized (ConnectTool.this) {
+			if (reconnectThread != null) {
+				reconnectThread.interrupt();
+			}
+		}
 		window = null;
 		autoShowUI = null;
 		andConnectUI = null;
@@ -749,6 +756,48 @@ public class ConnectTool implements SimpleTool, TreeBox.MultiSelectionHandler
 					window.close();
 				}
 			});
+		}
+		else
+		{
+			synchronized (ConnectTool.this)
+			{
+				if (direct && reconnectThread == null)
+					{
+					reconnectThread = new Thread(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							try
+							{
+								Thread.sleep(DIRECT_CONNECT_RETRY_DELAY);
+							}
+							catch (InterruptedException e)
+							{
+								synchronized (ConnectTool.this)
+								{
+									reconnectThread = null;
+								}
+								return;
+							}
+
+							synchronized (ConnectTool.this)
+							{
+								reconnectThread = null;
+							}
+							try
+							{
+								actionConnect();
+							}
+							catch (GeneralException e)
+							{
+								// Don't bother retrying
+							}
+						}
+					});
+					reconnectThread.start();
+				}
+			}
 		}
 	}
 

@@ -195,12 +195,15 @@ public class FrameInside extends MacFixInternalFrame implements FrameHolder
 
 			super.setVisible(true);
 
-			new Thread(() -> {
-				try {
-					Thread.sleep(100);
-				} catch (final InterruptedException ex) {
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(100);
+					} catch (final InterruptedException ex) {
+					}
+					wi.getUI().setFocusableWindowState(true);
 				}
-				wi.getUI().setFocusableWindowState(true);
 			}).start();
 		} else {
 			super.setVisible(false);

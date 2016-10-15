@@ -2429,4 +2429,8 @@ public class UISingleton implements UI
 		}
 		throw new IllegalArgumentException("Unknown MacIndent value: " + macIndent);
 	}
+
+	public void setFocusableWindowState(boolean focusable) {
+		f.setFocusableWindowState(focusable);
+	}
 }

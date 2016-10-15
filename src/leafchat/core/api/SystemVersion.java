@@ -24,19 +24,19 @@ public class SystemVersion
 	/** @return Version number for display in title bar */
 	public static String getTitleBarVersion()
 	{
-		return "@TITLEBARVERSION@";
+		return "2.5 Ezid mod";
 	}
 
 	/** @return Version number for CTCP VERSION reports */
 	public static String getCTCPVersion()
 	{
-		return "@CTCPVERSION@";
+		return "2.5 Ezid mod";
 	}
 
 	/** @return Internal build identifier */
 	public static String getBuildVersion()
 	{
-		return "@BUILDVERSION@";
+		return "2.5.1E";
 	}
 
 }

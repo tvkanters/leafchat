@@ -105,6 +105,12 @@ public class TextViewImp extends ScrollingLayout implements ThemeListener
 		});
 	}
 
+	@Override
+	protected void paintComponent(final Graphics g) {
+		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		super.paintComponent(g);
+	}
+
 	private static StyleContext contextWithThemes=null,contextWithThemesTV=null;
 	private static Theme currentTheme;
 

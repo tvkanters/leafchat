@@ -191,7 +191,8 @@ public class FrameInside extends MacFixInternalFrame implements FrameHolder
 	@Override
 	public void setVisible(final boolean visible) {
 		if (visible) {
-			wi.getUI().setFocusableWindowState(false);
+			final UISingleton ui = wi.getUI();
+			ui.setFocusableWindowState(false);
 
 			super.setVisible(true);
 
@@ -199,11 +200,10 @@ public class FrameInside extends MacFixInternalFrame implements FrameHolder
 				@Override
 				public void run() {
 					try {
-						Thread.sleep(100);
-					} catch (final InterruptedException ex) {
-					}
-					wi.getUI().setFocusableWindowState(true);
-				}
+						Thread.sleep(250);
+					} catch (final InterruptedException ignored) {}
+					ui.setFocusableWindowState(true);
+			}
 			}).start();
 		} else {
 			super.setVisible(false);
